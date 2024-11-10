@@ -3,131 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculatrice Forex - Stratégie de Hassim</title>
+    <title>Gestion Forex - Hassim Traider</title>
     <style>
+        /* Styles de base */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-image: url('background-forex.jpg');
+            background-size: cover;
+            background-attachment: fixed;
             margin: 0;
+            padding: 0;
         }
+
+        /* Styles pour les sections */
         .container {
-            background-color: #ffffff;
+            max-width: 800px;
+            margin: 20px auto;
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        h2 {
-            color: #2c3e50;
+
+        h1, h2 {
+            color: #333;
             text-align: center;
-            margin-bottom: 20px;
         }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-            color: #34495e;
-        }
-        input[type="number"] {
-            padding: 10px;
-            width: 100%;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #bdc3c7;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        button {
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            width: 100%;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
             transition: background-color 0.3s;
             margin-top: 10px;
         }
-        button:hover {
-            background-color: #45a049;
+
+        .btn:hover {
+            background-color: #555;
         }
-        #result {
-            font-weight: bold;
+
+        /* Styles pour les boutons colorés */
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        /* Tableau des trades */
+        .trade-table, .trade-table th, .trade-table td {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .trade-table th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Icônes de contact */
+        .contact-section {
+            text-align: center;
             margin-top: 20px;
-            text-align: center;
-            color: #2c3e50;
         }
-        footer {
-            margin-top: 30px;
-            font-size: 0.9em;
-            text-align: center;
-            color: #7f8c8d;
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
         }
-        footer a {
-            color: #2980b9;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
+
+        .contact-icon:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Calculatrice Forex - Stratégie de Hassim Traider Forex</h2>
-        <p>Entrez les informations ci-dessous pour calculer la taille de lot et le profit potentiel basé sur votre capital et votre stratégie de 100 pips.</p>
+        <h1>Gestion Forex - Hassim Traider</h1>
+        
+        <!-- Lien vers le broker -->
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="btn btn-primary" onclick="window.open('https://one.exnesstrack.org/a/sfpfysgpc9')">
+                Exness - Cliquez ici pour le meilleur broker du monde
+            </button>
+        </div>
+        
+        <!-- Formulaire pour ajouter un trade -->
+        <section>
+            <h2>Ajouter un Trade</h2>
+            <form id="trade-form">
+                <label for="pair">Paire de Devises :</label>
+                <select id="pair">
+                    <option value="EUR/USD">EUR/USD</option>
+                    <option value="USD/JPY">USD/JPY</option>
+                    <!-- Ajouter plus de paires de devises -->
+                </select><br><br>
 
-        <label for="capital">Capital initial (en USD) :</label>
-        <input type="number" id="capital" placeholder="Exemple : 100" required>
+                <label for="entry-price">Prix d'Entrée :</label>
+                <input type="number" id="entry-price" step="0.0001" required><br><br>
 
-        <label for="riskPercentage">Pourcentage de risque (%) :</label>
-        <input type="number" id="riskPercentage" placeholder="Exemple : 2" required>
+                <label for="exit-price">Prix de Sortie :</label>
+                <input type="number" id="exit-price" step="0.0001" required><br><br>
 
-        <label for="pipValue">Valeur par pip (en devise) :</label>
-        <input type="number" id="pipValue" placeholder="Exemple : 0.10 pour USD/JPY" required>
+                <button type="button" class="btn btn-success" onclick="addTrade()">Ajouter le Trade</button>
+            </form>
+        </section>
 
-        <button onclick="calculerLotEtProfit()">Calculer la Taille de Lot et Profit Potentiel</button>
+        <!-- Tableau des trades -->
+        <section>
+            <h2>Suivi des Trades</h2>
+            <table class="trade-table">
+                <tr>
+                    <th>Date</th>
+                    <th>Paire</th>
+                    <th>Entrée</th>
+                    <th>Sortie</th>
+                    <th>Gain/Perte</th>
+                    <th>Pourcentage</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody id="trade-table-body">
+                    <!-- Les trades ajoutés apparaîtront ici -->
+                </tbody>
+            </table>
+        </section>
 
-        <div id="result"></div>
+        <!-- Calculateur de risque et de lot -->
+        <section>
+            <h2>Calculateur de Risque et Taille de Lot</h2>
+            <form id="risk-calculator">
+                <label for="capital">Capital Total :</label>
+                <input type="number" id="capital" required><br><br>
 
-        <footer>
-            <p>Pour en savoir plus sur cette stratégie, visitez votre broker : <a href="https://one.exnesstrack.org/a/sfpfysgpc9" target="_blank">lien du broker</a></p>
-            <p>Contact WhatsApp : <a href="https://wa.me/22657202363" target="_blank">+226 57 20 23 63</a></p>
-        </footer>
+                <label for="risk-percentage">Risque (%) :</label>
+                <input type="number" id="risk-percentage" required><br><br>
+
+                <label for="stop-loss-pips">Stop Loss (en pips) :</label>
+                <input type="number" id="stop-loss-pips" required><br><br>
+
+                <button type="button" class="btn btn-warning" onclick="calculateLotSize()">Calculer Taille de Position</button>
+            </form>
+            <p id="risk-output"></p>
+        </section>
+
+        <!-- Section des contacts avec icônes -->
+        <section class="contact-section">
+            <h2>Contactez-moi</h2>
+            <a href="https://wa.me/+22657202363" target="_blank">
+                <img src="whatsapp-icon.png" alt="WhatsApp" class="contact-icon">
+            </a>
+            <a href="https://ko-fi.com/guenecheick" target="_blank">
+                <img src="kofi-icon.png" alt="Ko-fi" class="contact-icon">
+            </a>
+        </section>
     </div>
 
     <script>
-        function calculerLotEtProfit() {
-            const capital = parseFloat(document.getElementById('capital').value);
-            const riskPercentage = parseFloat(document.getElementById('riskPercentage').value);
-            const pipValue = parseFloat(document.getElementById('pipValue').value);
-            const pipTarget = 100; // Cible de pips définie pour la stratégie
+        // Fonction pour ajouter un trade et sauvegarder dans localStorage
+        function addTrade() {
+            const pair = document.getElementById('pair').value;
+            const entryPrice = parseFloat(document.getElementById('entry-price').value);
+            const exitPrice = parseFloat(document.getElementById('exit-price').value);
+            const profitLoss = (exitPrice - entryPrice).toFixed(4);
+            const profitPercentage = ((profitLoss / entryPrice) * 100).toFixed(2);
+            const date = new Date().toLocaleDateString();
 
-            if (isNaN(capital) || isNaN(riskPercentage) || isNaN(pipValue)) {
-                document.getElementById('result').innerText = "Veuillez entrer toutes les valeurs correctement.";
-                return;
-            }
+            const trade = { date, pair, entryPrice, exitPrice, profitLoss, profitPercentage };
+            saveTrade(trade);
 
-            // Calcul du risque en USD et de la taille de lot recommandée
-            const riskAmount = (capital * riskPercentage) / 100;
-            const lotSize = riskAmount / (pipTarget * pipValue);
-
-            // Calcul du profit potentiel basé sur la taille de lot et l'objectif de pips
-            const potentialProfit = lotSize * pipTarget * pipValue;
-
-            // Affichage des résultats
-            document.getElementById('result').innerHTML = `
-                <p>Taille de lot recommandée : <strong>${lotSize.toFixed(2)}</strong> lots</p>
-                <p>Profit potentiel : <strong>${potentialProfit.toFixed(2)} USD</strong></p>
-            `;
+            // Affiche le trade dans le tableau
+            displayTrade(trade);
+            document.getElementById('trade-form').reset();
         }
+
+        // Fonction pour afficher un trade dans le tableau avec option de suppression
+        function displayTrade(trade) {
+            const tradeRow = `<tr>
+                <td>${trade.date}</td>
+                <td>${trade.pair}</td>
+                <td>${trade.entryPrice}</td>
+                <td>${trade.exitPrice}</td>
+                <td>${trade.profitLoss}</td>
+                <td>${trade.profitPercentage}%</td>
+                <td><button class="btn btn-danger" onclick="deleteTrade('${trade.date}', '${trade.pair}')">Supprimer</button></td>
+            </tr>`;
+
+            document.getElementById('trade-table-body').innerHTML += tradeRow;
+        }
+
+        // Sauvegarde un trade dans localStorage
+        function saveTrade(trade) {
+            const trades = JSON.parse(localStorage.getItem('trades')) || [];
+            trades.push(trade);
+            localStorage.setItem('trades', JSON.stringify(trades));
+        }
+
+        // Récupère et affiche les trades enregistrés
+        function loadTrades() {
+            const trades = JSON.parse(localStorage.getItem('trades')) || [];
+            trades.forEach(displayTrade);
+        }
+
+        // Supprime un trade de localStorage
+        function deleteTrade(date, pair) {
+            let trades = JSON.parse(localStorage.getItem('trades')) || [];
+            trades = trades.filter(trade => trade.date !== date || trade.pair !== pair);
+            localStorage.setItem('trades', JSON.stringify(trades));
+            document.getElementById('trade-table-body').innerHTML = '';
+            loadTrades();
+        }
+
+        // Calcul de taille de position
+        function calculateLotSize() {
+            const capital = parseFloat(document.getElementById('capital').value);
+            const riskPercentage = parseFloat(document.getElementById('risk-percentage').value);
+            const stopLossPips = parseFloat(document.getElementById('stop-loss-pips').value);
+
+            const riskAmount = (capital * riskPercentage / 100).toFixed(2);
+            const lotSize = (riskAmount / (stopLossPips * 10)).toFixed(2);
+
+            document.getElementById('risk-output').innerText = `Vous pouvez risquer ${riskAmount} avec une taille de lot de ${lotSize}.`;
+        }
+
+        // Charger les trades existants au démarrage
+                // Charger les trades existants au démarrage
+        window.onload = loadTrades;
     </script>
 </body>
 </html>
